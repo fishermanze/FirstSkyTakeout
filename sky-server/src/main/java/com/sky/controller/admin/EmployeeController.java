@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/employee")
-@Slf4j
+@Slf4j  //注解自动生成Logger log=new Logger();
 public class EmployeeController {
 
     @Autowired
@@ -90,6 +90,34 @@ public class EmployeeController {
         log.info("员工分页查询,参数为:{}",employeePageQueryDTO);
         PageResult pageResult=employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("员工状态修改")
+    public Result useOrnot(@PathVariable Integer status,Long id)
+    {
+        log.info("员工id：{}被"+(status==1?"启用":"停用"),id);
+        employeeService.UseOrnot(id,status);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("按id查询员工数据")
+    public Result<Employee>SelectByID(@PathVariable Long id)
+    {
+        log.info("查询的员工id为：{}",id);
+        Employee employee=employeeService.SelectByID(id);
+        return Result.success(employee);
+    }
+
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    public Result UpdateEmployee(@RequestBody EmployeeDTO employeeDTO)
+    {
+        log.info("修改员工:{}",employeeDTO);
+        employeeService.UpdateEmployee(employeeDTO);
+        return Result.success();
     }
 
 }
